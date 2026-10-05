@@ -451,7 +451,8 @@ class ActionTestCase(common.BleachbitTestCase):
             '<action command="delete" search="walk.all" '
             f'path="{dirname}" min_age_days="10" />'
         )
-        paths = [result['path'] for result in _action_str_to_results(action_str)]
+        paths = [result['path']
+                 for result in _action_str_to_results(action_str)]
         self.assertCountEqual(paths, (old_file, nested_old_file))
         self.assertNotIn(nested_dir, paths)
 
