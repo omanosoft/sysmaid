@@ -146,7 +146,7 @@ jobs:
           fi
 
       - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
+        uses: ./.github/actions/generate-revision
 
       - name: Generate translations
         run: make -C po local
@@ -276,7 +276,7 @@ jobs:
           Get-ChildItem .\advancecomp\
 
       - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
+        uses: ./.github/actions/generate-revision
 
       - name: Get version
         id: revision
@@ -401,7 +401,7 @@ jobs:
         run: choco install psexec --version=2.43 -y
 
       - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
+        uses: ./.github/actions/generate-revision
 
       - name: Generate translations
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax

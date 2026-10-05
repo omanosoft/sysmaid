@@ -54,7 +54,7 @@ jobs:
 
       # Without it, pylint reports bleachbit.Revision as an unresolved import
       - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
+        uses: ./.github/actions/generate-revision
 
       - name: Run lint
         run: make require-lint-tools lint
@@ -104,7 +104,7 @@ jobs:
 
       # Without it, pylint reports bleachbit.Revision as an unresolved import
       - name: Generate Revision.py
-        uses: $/.github/actions/generate-revision
+        uses: ./.github/actions/generate-revision
 
       # lint warns and skips the shellcheck and appstreamcli steps here.
       - name: Run lint
