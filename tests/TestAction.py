@@ -428,6 +428,42 @@ class ActionTestCase(common.BleachbitTestCase):
             self.assertRaises(
                 RuntimeError, lambda: _action_str_to_results(action_str))
 
+    def test_min_age_days(self):
+        """Age filtering selects old files and never directory shells."""
+        dirname = self.mkdtemp(prefix='bleachbit-action-age')
+        old_file = os.path.join(dirname, 'old.log')
+        recent_file = os.path.join(dirname, 'recent.log')
+        nested_dir = os.path.join(dirname, 'nested')
+        os.mkdir(nested_dir)
+        nested_old_file = os.path.join(nested_dir, 'nested-old.log')
+        for path in (old_file, recent_file, nested_old_file):
+            common.touch_file(path)
+
+        now = time.time()
+        old_time = now - 11 * 24 * 60 * 60
+        recent_time = now - 9 * 24 * 60 * 60
+        os.utime(old_file, (old_time, old_time))
+        os.utime(nested_old_file, (old_time, old_time))
+        os.utime(recent_file, (recent_time, recent_time))
+        os.utime(nested_dir, (old_time, old_time))
+
+        action_str = (
+            '<action command="delete" search="walk.all" '
+            f'path="{dirname}" min_age_days="10" />'
+        )
+        paths = [result['path'] for result in _action_str_to_results(action_str)]
+        self.assertCountEqual(paths, (old_file, nested_old_file))
+        self.assertNotIn(nested_dir, paths)
+
+    def test_min_age_days_must_be_positive(self):
+        """Reject nonsensical retention periods."""
+        action_str = (
+            '<action command="delete" search="walk.files" '
+            'path="/tmp" min_age_days="0" />'
+        )
+        self.assertRaises(ValueError, lambda: list(
+            _action_str_to_commands(action_str)))
+
     def test_search_glob(self):
         """Unit test for search=glob"""
 

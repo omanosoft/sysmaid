@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2026.
+-->
+<cleaner id="codex">
+  <label>OpenAI Codex</label>
+  <description>AI coding assistant</description>
+  <running type="exe" os="windows" same_user="true">Codex.exe</running>
+  <running type="exe" os="windows" same_user="true">codex.exe</running>
+  <running type="exe" os="linux" same_user="true">codex</running>
+  <option id="old_sessions_10_days">
+    <label>Old sessions (10 days)</label>
+    <description>Delete conversation session files older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.codex/sessions/" min_age_days="10"/>
+  </option>
+  <option id="old_generated_images_10_days">
+    <label>Old generated images (10 days)</label>
+    <description>Delete generated image artifacts older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.codex/generated_images/" min_age_days="10"/>
+  </option>
+  <option id="old_cache_10_days">
+    <label>Old cache (10 days)</label>
+    <description>Delete cache and temporary files older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.codex/cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.codex/.tmp/" min_age_days="10"/>
+  </option>
+  <option id="runtime_cache">
+    <label>Downloaded runtimes</label>
+    <description>Delete tool runtimes that can be downloaded again when needed</description>
+    <action command="delete" search="walk.all" path="~/.cache/codex-runtimes/"/>
+  </option>
+</cleaner>

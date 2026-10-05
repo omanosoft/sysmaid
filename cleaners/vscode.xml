@@ -88,11 +88,28 @@ VSCodium 1.121.03429 on Windows has process `VSCodium.exe`.
     <action command="delete" search="walk.all" path="$$base$$/Partitions/*/DawnGraphiteCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/Partitions/*/DawnWebGPUCache/"/>
     <action command="delete" search="walk.all" path="$$base$$/Partitions/*/GPUCache/"/>
+    <action command="delete" search="walk.all" path="$$base$$/WebStorage/*/CacheStorage/"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crashpad/"/>
+  </option>
+  <option id="old_cache_10_days">
+    <label>Old cache (10 days)</label>
+    <description>Delete cache files older than 10 days</description>
+    <action command="delete" search="walk.files" path="$$base$$/blob_storage/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/Cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/CachedConfigurations/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/CachedData/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/CachedExtensionVSIXs/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/CachedProfilesData/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/Code Cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/Crashpad/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/DawnGraphiteCache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/DawnWebGPUCache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/GPUCache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$base$$/WebStorage/*/CacheStorage/" min_age_days="10"/>
   </option>
   <option id="logs">
     <label>Logs</label>

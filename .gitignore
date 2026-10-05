@@ -77,3 +77,10 @@ venv/
 
 # macOS
 .DS_Store
+
+vcpkg_installed/x86-windows/
+gtk3.24-x86-windows.zip
+.gitignore
+VC_redist.x86.exe
+gtk-themes.zip
+pygobject-3.58.0-cp312-cp312-win32.whl

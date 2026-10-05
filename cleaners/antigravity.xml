@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2026.
+-->
+<cleaner id="antigravity">
+  <label>Gemini Antigravity</label>
+  <description>AI coding assistant</description>
+  <running type="exe" os="windows" same_user="true">Antigravity.exe</running>
+  <running type="exe" os="linux" same_user="true">antigravity</running>
+  <var name="data">
+    <value>~/.gemini/antigravity</value>
+    <value>~/.gemini/antigravity-ide</value>
+    <value>~/.gemini/antigravity-backup</value>
+  </var>
+  <option id="old_conversations_10_days">
+    <label>Old conversations (10 days)</label>
+    <description>Delete conversation data older than 10 days</description>
+    <action command="delete" search="walk.files" path="$$data$$/conversations/" min_age_days="10"/>
+  </option>
+  <option id="old_agent_data_10_days">
+    <label>Old agent data (10 days)</label>
+    <description>Delete old agent reasoning, implicit context, and scratch data</description>
+    <action command="delete" search="walk.files" path="$$data$$/brain/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$data$$/implicit/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="$$data$$/scratch/" min_age_days="10"/>
+  </option>
+  <option id="old_browser_recordings_10_days">
+    <label>Old browser recordings (10 days)</label>
+    <description>Delete browser recordings older than 10 days</description>
+    <action command="delete" search="walk.files" path="$$data$$/browser_recordings/" min_age_days="10"/>
+  </option>
+  <option id="old_browser_cache_10_days">
+    <label>Old browser cache (10 days)</label>
+    <description>Delete Antigravity browser cache older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/Default/Cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/Default/Code Cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/Default/GPUCache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/component_crx_cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/extensions_crx_cache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/GrShaderCache/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-browser-profile/ShaderCache/" min_age_days="10"/>
+  </option>
+  <option id="old_cli_temp_10_days">
+    <label>Old temporary files (10 days)</label>
+    <description>Delete Gemini and Antigravity temporary files older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.gemini/tmp/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.gemini/antigravity-cli/" min_age_days="10"/>
+  </option>
+</cleaner>

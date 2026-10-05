@@ -13,6 +13,7 @@ import glob
 import logging
 import os
 import re
+import time
 from itertools import product
 
 # first party imports
@@ -133,6 +134,13 @@ class FileActionProvider(ActionProvider):
         assert (isinstance(self.wholeregex, (str, type(None))))
         self.nwholeregex = action_element.getAttribute('nwholeregex')
         assert (isinstance(self.nwholeregex, (str, type(None))))
+        min_age_days = action_element.getAttribute('min_age_days')
+        self.min_age_seconds = None
+        if min_age_days:
+            min_age_days = float(min_age_days)
+            if min_age_days <= 0:
+                raise ValueError('min_age_days must be greater than zero')
+            self.min_age_seconds = min_age_days * 24 * 60 * 60
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)
@@ -152,7 +160,8 @@ class FileActionProvider(ActionProvider):
                     _("Deep scan does not support multi-value variables."))
         # If the filter is not needed, bypass it for speed.
         self._use_fast_path = not any([self.object_type, self.regex, self.nregex,
-                                       self.wholeregex, self.nwholeregex])
+                                       self.wholeregex, self.nwholeregex,
+                                       self.min_age_seconds])
 
     def _set_paths(self, raw_path, path_vars):
         """Set the list of paths to work on"""
@@ -195,6 +204,8 @@ class FileActionProvider(ActionProvider):
         nregex = self.nregex
         wholeregex = self.wholeregex
         nwholeregex = self.nwholeregex
+        min_age_seconds = self.min_age_seconds
+        age_cutoff = time.time() - min_age_seconds if min_age_seconds else None
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
@@ -220,6 +231,20 @@ class FileActionProvider(ActionProvider):
             nwholeregex_c_search = None
 
         for path in self._get_paths():
+            if min_age_seconds:
+                # Age-filtered actions intentionally leave directory shells.
+                # Deleting a directory based only on its own timestamp could
+                # remove newer descendants or make Preview overstate results.
+                if os.path.isdir(path) and not os.path.islink(path):
+                    continue
+                try:
+                    if os.stat(path, follow_symlinks=False).st_mtime >= age_cutoff:
+                        continue
+                except OSError:
+                    # Match the walk helpers: a path disappearing or becoming
+                    # unreadable during a scan should not abort the cleaner.
+                    continue
+
             if regex and not regex_c_search(basename(path)):
                 continue
 

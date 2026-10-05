@@ -38,7 +38,6 @@ later.  See the COPYING file in the top-level directory.
   <option id="gradle_cache">
     <label>Gradle cache</label>
     <description>Delete downloaded dependencies and build artifacts</description>
-    <warning>Dependencies will need to be downloaded on the next build.</warning>
     <action command="delete" search="walk.all" path="$$gradle_home$$/caches/"/>
     <action command="delete" search="walk.all" path="$$gradle_home$$/daemon/"/>
   </option>

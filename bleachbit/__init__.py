@@ -252,6 +252,12 @@ def get_share_path(filename):
 windows10_theme_path = os.path.normpath(
     os.path.join(bleachbit_exe_path, 'themes/windows10'))
 
+# SysMaid's visual layer.  It is intentionally separate from the bundled
+# Windows 10 theme so upstream theme updates can be merged without losing the
+# product's own look and feel.
+sysmaid_theme_path = os.path.normpath(
+    os.path.join(bleachbit_exe_path, 'themes/sysmaid'))
+
 # application icon
 __icons = (
     # AppImage

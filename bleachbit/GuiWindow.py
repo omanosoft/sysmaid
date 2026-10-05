@@ -11,7 +11,9 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
+from bleachbit import (APP_NAME, Cleaner, FileUtilities, GuiBasic,
+                       Language, appicon_path, sysmaid_theme_path,
+                       windows10_theme_path, IS_MAC, IS_WINDOWS)
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -67,6 +69,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _style_provider = None
     _style_provider_regular = None
     _style_provider_dark = None
+    _sysmaid_style_provider = None
     _error_tag_color = None
     _showed_startup_messages = False
     _scroll_pending = False
@@ -159,6 +162,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def populate_window(self):
         """Create the main application window"""
+        self.get_style_context().add_class('sysmaid-window')
         screen = self.get_screen()
         display = screen.get_display()
         monitor = display.get_primary_monitor()
@@ -186,14 +190,17 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.headerbar = self.create_headerbar()
         self.set_titlebar(self.headerbar)
         bleachbit.log_startup_time('headerbar built')
+        self.set_title(APP_NAME)
 
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
+        hbox.get_style_context().add_class('sysmaid-content')
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
 
         # add InfoBar for non-blocking messages
         self._build_infobar(vbox)
+        self.infobar.get_style_context().add_class('sysmaid-infobar')
 
         vbox.add(hbox)
 
@@ -203,15 +210,19 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # create the right side of the window
         right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        right_box.get_style_context().add_class('sysmaid-main-panel')
         self.progressbar = Gtk.ProgressBar()
+        self.progressbar.get_style_context().add_class('sysmaid-progress')
         right_box.pack_start(self.progressbar, False, True, 0)
 
         # add output display on right
         self.textbuffer = Gtk.TextBuffer()
         swindow = Gtk.ScrolledWindow()
+        swindow.get_style_context().add_class('sysmaid-output-frame')
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_property('expand', True)
         self.textview = Gtk.TextView.new_with_buffer(self.textbuffer)
+        self.textview.get_style_context().add_class('sysmaid-output')
         self.textview.set_editable(False)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         swindow.add(self.textview)
@@ -246,11 +257,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self._update_error_tag_color()
 
         self.status_bar = Gtk.Statusbar()
+        self.status_bar.get_style_context().add_class('sysmaid-statusbar')
         vbox.add(self.status_bar)
         # setup drag&drop
         self.setup_drag_n_drop()
         bleachbit.log_startup_time('widgets built')
         # done
+        self.set_sysmaid_theme()
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
@@ -321,6 +334,34 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 logger.error('Failed to load Windows 10 dark theme: %s', e)
                 self._style_provider_dark = None
         return self._style_provider_dark
+
+    def set_sysmaid_theme(self):
+        """Apply the SysMaid palette and component styling.
+
+        The provider uses user priority so this small visual layer remains
+        consistent whether the platform is using Adwaita or the optional
+        Windows 10 compatibility theme.
+        """
+        screen = self.get_screen()
+        if screen is None:
+            logger.info('Screen not available yet, deferring SysMaid theme')
+            return
+
+        if self._sysmaid_style_provider is None:
+            css_path = os.path.join(sysmaid_theme_path, 'gtk.css')
+            provider = Gtk.CssProvider()
+            try:
+                provider.load_from_path(css_path)
+            except Exception as e:
+                logger.error('Failed to load SysMaid theme from %s: %s',
+                             css_path, e)
+                return
+            self._sysmaid_style_provider = provider
+
+        Gtk.StyleContext.add_provider_for_screen(
+            screen,
+            self._sysmaid_style_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
     def set_windows10_theme(self):
         """Apply or remove the Windows 10 theme based on current settings"""
@@ -1112,6 +1153,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     def create_headerbar(self):
         """Create the headerbar"""
         hbar = Gtk.HeaderBar()
+        hbar.get_style_context().add_class('sysmaid-headerbar')
 
         # The update button is on the right side of the headerbar.
         # It is hidden until an update is available.
@@ -1151,7 +1193,9 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.update_button.set_no_show_all(True)
         self.update_button.hide()
         hbar.props.show_close_button = True
+
         hbar.props.title = APP_NAME
+        hbar.props.subtitle = '✿  soft care for your digital space  ✿'
 
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
@@ -1164,6 +1208,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # create the preview button
         self.preview_button = Gtk.Button.new_from_icon_name(
             resolve_icon_name('edit-find'), icon_size)
+        self.preview_button.get_style_context().add_class('sysmaid-preview')
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
@@ -1172,6 +1217,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # create the delete button
         self.run_button = Gtk.Button.new_from_icon_name(
             resolve_icon_name('edit-clear-all'), icon_size)
+        self.run_button.get_style_context().add_class('sysmaid-clean')
         self.run_button.set_always_show_image(True)
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
@@ -1179,6 +1225,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # stop cleaning
         self.stop_button = Gtk.Button.new_from_icon_name(
             resolve_icon_name('process-stop'), icon_size)
+        self.stop_button.get_style_context().add_class('sysmaid-stop')
         self.stop_button.set_always_show_image(True)
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
@@ -1188,6 +1235,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         # Add hamburger menu on the right
         self.menu_button = Gtk.MenuButton()
+        self.menu_button.get_style_context().add_class('sysmaid-menu')
         app_menu_path = bleachbit.get_share_path('app-menu.ui')
         if app_menu_path:
             icon = Gio.ThemedIcon(name="open-menu-symbolic")

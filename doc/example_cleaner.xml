@@ -88,6 +88,9 @@
          The following action truncates any file that ends with log.
          -->
     <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="f"/>
+    <!-- min_age_days limits an action to files older than the given age.
+         Directory shells are retained to protect newer descendants. -->
+    <action command="delete" search="walk.files" path="/var/tmp/" min_age_days="10"/>
     <!-- command=sqlite.vacuum defragments an SQLite 3 database -->
     <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
     <!-- command="winreg" without the attribute 'name' deletes

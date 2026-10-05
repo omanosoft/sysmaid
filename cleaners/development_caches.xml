@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2026.
+-->
+<cleaner id="development_caches">
+  <label>Development caches</label>
+  <description>Downloaded packages and generated development artifacts</description>
+  <option id="nuget">
+    <label>NuGet</label>
+    <description>Delete downloaded NuGet packages and HTTP cache; required packages will be downloaded again</description>
+    <action command="delete" search="walk.all" path="~/.nuget/packages/"/>
+    <action command="delete" search="walk.all" path="%LocalAppData%/NuGet/v3-cache/"/>
+  </option>
+  <option id="yarn">
+    <label>Yarn</label>
+    <description>Delete downloaded Yarn packages; required packages will be downloaded again</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/Yarn/Cache/"/>
+  </option>
+  <option id="playwright">
+    <label>Playwright browsers</label>
+    <description>Delete downloaded test browsers; Playwright will download them again when needed</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/ms-playwright/"/>
+  </option>
+  <option id="puppeteer">
+    <label>Puppeteer browsers</label>
+    <description>Delete downloaded browser binaries; Puppeteer will download them again when needed</description>
+    <action command="delete" search="walk.all" path="~/.cache/puppeteer/"/>
+  </option>
+  <option id="dart_pub">
+    <label>Dart and Flutter Pub</label>
+    <description>Delete downloaded Pub packages; required packages will be downloaded again</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/Pub/Cache/"/>
+  </option>
+  <option id="azure_functions">
+    <label>Azure Functions tools</label>
+    <description>Delete downloaded Azure Functions runtimes; they will be downloaded again when needed</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/AzureFunctionsTools/"/>
+  </option>
+  <option id="go_build">
+    <label>Go build</label>
+    <description>Delete generated Go build cache</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/go-build/"/>
+  </option>
+  <option id="go_modules">
+    <label>Go modules</label>
+    <description>Delete downloaded Go modules; required modules will be downloaded again</description>
+    <action command="delete" search="walk.all" path="~/go/pkg/mod/"/>
+  </option>
+  <option id="npm">
+    <label>npm</label>
+    <description>Delete downloaded npm package cache and temporary npx packages</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/npm-cache/"/>
+    <action command="delete" search="walk.all" path="~/.npm/_cacache/"/>
+    <action command="delete" search="walk.all" path="~/.npm/_logs/"/>
+    <action command="delete" search="walk.all" path="~/.npm/_npx/"/>
+  </option>
+  <option id="pip">
+    <label>pip</label>
+    <description>Delete downloaded Python package cache</description>
+    <action command="delete" search="walk.all" path="%LocalAppData%/pip/Cache/"/>
+    <action command="delete" search="walk.all" path="~/.cache/pip/"/>
+  </option>
+</cleaner>

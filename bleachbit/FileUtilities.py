@@ -77,8 +77,14 @@ def _remove_windows_readonly(path):
         return False
     # pylint: disable-next=possibly-used-before-assignment
     if attrs & FILE_ATTRIBUTE_READONLY:
-        # pylint: disable-next=possibly-used-before-assignment
-        SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
+        try:
+            # pylint: disable-next=possibly-used-before-assignment
+            SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
+        except pywinerror as e:
+            # e.g., access denied on a protected file; let the caller
+            # re-raise the original deletion error.
+            logger.debug("cannot clear read-only on '%s': %s", path, e)
+            return False
         return True
     return False
 
@@ -1143,7 +1149,12 @@ def listdir(directory):
     dirname = os.path.expanduser(directory)
     if not os.path.lexists(dirname):
         return
-    for filename in os.listdir(dirname):
+    try:
+        filenames = os.listdir(dirname)
+    except OSError as exc:
+        logger.warning('Unable to list directory %s: %s', dirname, exc)
+        return
+    for filename in filenames:
         yield os.path.join(dirname, filename)
 
 

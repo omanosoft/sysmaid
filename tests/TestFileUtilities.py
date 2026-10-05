@@ -1841,6 +1841,13 @@ State=AAAA/wA...
         for pathname in paths12:
             self.assertLExists(pathname)
 
+    def test_listdir_unreadable(self):
+        """An unreadable optional directory does not abort discovery."""
+        with unittest.mock.patch('os.path.lexists', return_value=True), \
+                unittest.mock.patch('os.listdir', side_effect=PermissionError('denied')):
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING'):
+                self.assertEqual([], list(listdir('/unreadable')))
+
     def test_is_normal_directory_real(self):
         """Unit test for is_normal_directory() with real files"""
         # Test with a real directory.

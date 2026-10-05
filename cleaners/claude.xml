@@ -47,6 +47,14 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/.claude/sessions/"/>
     <action command="delete" search="walk.all" path="~/.claude/session-env/"/>
   </option>
+  <option id="old_session_10_days">
+    <label>Old sessions (10 days)</label>
+    <description>Delete conversation and restore data older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.claude/projects/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.claude/sessions/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.claude/session-env/" min_age_days="10"/>
+    <action command="delete" search="walk.files" path="~/.claude/file-history/" min_age_days="10"/>
+  </option>
   <option id="shell_snapshots">
     <label translators="In Claude Code: captured shell environment used by the Bash tool">Shell snapshots</label>
     <description>Delete the files</description>

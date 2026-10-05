@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2026.
+-->
+<cleaner id="cursor">
+  <label>Cursor</label>
+  <description>AI coding editor</description>
+  <running type="exe" os="windows" same_user="true">Cursor.exe</running>
+  <running type="exe" os="linux" same_user="true">cursor</running>
+  <option id="old_agent_transcripts_10_days">
+    <label>Old agent transcripts (10 days)</label>
+    <description>Delete per-project agent transcript files older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.cursor/projects/*/agent-transcripts/" min_age_days="10"/>
+  </option>
+  <option id="old_browser_logs_10_days">
+    <label>Old browser logs (10 days)</label>
+    <description>Delete Cursor browser log files older than 10 days</description>
+    <action command="delete" search="walk.files" path="~/.cursor/browser-logs/" min_age_days="10"/>
+  </option>
+</cleaner>

@@ -1,0 +1,266 @@
+/*
+ * SysMaid — soft botanical GTK 3 theme layer
+ *
+ * Kept deliberately compact and independent from themes/windows10 so the
+ * visual identity survives clean upstream updates.
+ */
+
+@define-color sm_ink #4d2f40;
+@define-color sm_muted #896778;
+@define-color sm_canvas #fff8fb;
+@define-color sm_surface #fffdfd;
+@define-color sm_blush #fbe8f0;
+@define-color sm_petal #f6cddd;
+@define-color sm_rose #df6b9d;
+@define-color sm_rose_deep #b94076;
+@define-color sm_plum #7e3158;
+@define-color sm_lilac #b9a0dc;
+@define-color sm_sage #9bbf9d;
+@define-color sm_border #ebc2d3;
+
+.sysmaid-window,
+.sysmaid-window.background {
+  background-color: @sm_canvas;
+  color: @sm_ink;
+}
+
+.sysmaid-headerbar,
+.sysmaid-headerbar:backdrop {
+  min-height: 58px;
+  padding: 7px 10px;
+  border: 0;
+  border-bottom: 2px solid @sm_petal;
+  border-radius: 0;
+  background-image: linear-gradient(115deg, #fff4f8, #f8d9e6 52%, #eee3fa);
+  color: @sm_plum;
+  box-shadow: 0 3px 12px alpha(@sm_plum, 0.14);
+}
+
+.sysmaid-headerbar .title {
+  color: @sm_plum;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sysmaid-headerbar .subtitle {
+  color: @sm_rose_deep;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+button {
+  min-height: 28px;
+  padding: 5px 11px;
+  border: 1px solid @sm_border;
+  border-radius: 10px;
+  background-image: linear-gradient(to bottom, @sm_surface, @sm_blush);
+  color: @sm_ink;
+  box-shadow: 0 2px 5px alpha(@sm_plum, 0.10);
+  transition: 160ms ease-in-out;
+}
+
+button:hover {
+  border-color: @sm_rose;
+  background-image: linear-gradient(to bottom, #fffafd, #f9dbe7);
+  color: @sm_plum;
+  box-shadow: 0 3px 8px alpha(@sm_rose_deep, 0.18);
+}
+
+button:active,
+button:checked {
+  background-image: linear-gradient(to bottom, @sm_petal, #f9dce8);
+  box-shadow: inset 0 1px 3px alpha(@sm_plum, 0.16);
+}
+
+button:disabled {
+  border-color: #eadde3;
+  background-image: none;
+  background-color: #f8f1f4;
+  color: #b9a7af;
+  box-shadow: none;
+}
+
+.sysmaid-clean {
+  border-color: @sm_rose_deep;
+  background-image: linear-gradient(to bottom, #ed82ae, @sm_rose_deep);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.sysmaid-clean:hover {
+  border-color: @sm_plum;
+  background-image: linear-gradient(to bottom, #f08db7, #c84b82);
+  color: #ffffff;
+}
+
+.sysmaid-preview {
+  color: @sm_plum;
+  font-weight: 600;
+}
+
+.sysmaid-stop {
+  color: #a84665;
+}
+
+.sysmaid-content {
+  background-color: @sm_canvas;
+}
+
+.sysmaid-main-panel {
+  margin: 12px 12px 8px 8px;
+  border: 1px solid @sm_border;
+  border-radius: 14px;
+  background-color: @sm_surface;
+  box-shadow: 0 5px 16px alpha(@sm_plum, 0.10);
+}
+
+.sysmaid-output-frame {
+  border: 0;
+  border-radius: 13px;
+  background-color: @sm_surface;
+}
+
+.sysmaid-output,
+.sysmaid-output text {
+  padding: 14px;
+  background-color: @sm_surface;
+  color: @sm_ink;
+  caret-color: @sm_rose_deep;
+}
+
+treeview,
+treeview.view {
+  background-color: #fffafb;
+  color: @sm_ink;
+  border-right: 1px solid @sm_border;
+}
+
+treeview.view:selected,
+treeview.view:selected:focus {
+  background-color: @sm_petal;
+  color: @sm_plum;
+}
+
+treeview.view:hover {
+  background-color: #fdf0f5;
+}
+
+checkbutton,
+radiobutton {
+  color: @sm_ink;
+}
+
+check,
+radio {
+  min-width: 15px;
+  min-height: 15px;
+  border: 1px solid @sm_border;
+  background-image: none;
+  background-color: #ffffff;
+  color: @sm_rose_deep;
+  -gtk-icon-source: none;
+}
+
+check:checked,
+radio:checked {
+  border-color: @sm_rose_deep;
+  background-image: linear-gradient(to bottom, #ee82af, @sm_rose_deep);
+  background-color: @sm_rose_deep;
+  color: #ffffff;
+  -gtk-icon-source: -gtk-icontheme("object-select-symbolic");
+}
+
+.sysmaid-progress trough,
+progressbar trough {
+  min-height: 7px;
+  border: 0;
+  border-radius: 7px;
+  background-color: @sm_blush;
+}
+
+.sysmaid-progress progress,
+progressbar progress {
+  min-height: 7px;
+  border: 0;
+  border-radius: 7px;
+  background-image: linear-gradient(to right, @sm_rose, @sm_lilac);
+}
+
+.sysmaid-statusbar {
+  padding: 3px 10px;
+  border-top: 1px solid #f3dae4;
+  background-color: #fff5f8;
+  color: @sm_muted;
+}
+
+entry,
+spinbutton,
+textview {
+  border-color: @sm_border;
+  border-radius: 8px;
+  background-color: @sm_surface;
+  color: @sm_ink;
+}
+
+entry:focus,
+spinbutton:focus {
+  border-color: @sm_rose;
+  box-shadow: 0 0 0 2px alpha(@sm_rose, 0.20);
+}
+
+notebook > header {
+  border-color: @sm_border;
+  background-color: @sm_blush;
+}
+
+notebook > header > tabs > tab {
+  padding: 7px 12px;
+  color: @sm_muted;
+}
+
+notebook > header > tabs > tab:checked {
+  border-color: @sm_rose;
+  color: @sm_plum;
+  font-weight: 600;
+}
+
+menu,
+popover,
+dialog,
+messagedialog {
+  border-color: @sm_border;
+  background-color: @sm_surface;
+  color: @sm_ink;
+}
+
+menuitem:hover,
+modelbutton:hover {
+  background-color: @sm_blush;
+  color: @sm_plum;
+}
+
+scrollbar slider {
+  min-width: 8px;
+  min-height: 8px;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  background-color: #dcaac0;
+}
+
+scrollbar slider:hover {
+  background-color: @sm_rose;
+}
+
+.sysmaid-infobar {
+  border-bottom: 1px solid @sm_border;
+  background-color: #fff0f5;
+  color: @sm_ink;
+}
+
+tooltip {
+  border: 1px solid @sm_rose;
+  border-radius: 8px;
+  background-color: @sm_plum;
+  color: #ffffff;
+}

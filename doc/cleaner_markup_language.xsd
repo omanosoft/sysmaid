@@ -152,6 +152,7 @@ later.  See the COPYING file in the top-level directory.
                       <xs:attribute name="nregex" type="xs:string"/>
                       <xs:attribute name="wholeregex" type="xs:string"/>
                       <xs:attribute name="nwholeregex" type="xs:string"/>
+                      <xs:attribute name="min_age_days" type="xs:positiveInteger"/>
                       <xs:attribute name="type" type="xs:string"/>
                       <xs:attribute name="wait" type="xs:string"/>
                       <xs:attributeGroup ref="operatingSystem"/>
